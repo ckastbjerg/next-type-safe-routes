@@ -9,10 +9,12 @@ const generateTypeScriptFile = (pagesDir: string) => {
     directories: false,
     ignore: ["api"],
   });
-  const apiRouteFiles = walkSync(`${pagesDir}/api`, { directories: false });
+  const apiRouteFiles = walkSync(`${pagesDir}/api`, {
+    directories: false,
+  });
 
-  const pages = getPages(pagesFiles);
-  const apiRoutes = getApiRoutes(apiRouteFiles);
+  const pages = getPages(pagesFiles.map((page) => `/${page}`));
+  const apiRoutes = getApiRoutes(apiRouteFiles.map((page) => `/api/${page}`));
   const fileContent = getFileContent({ pages, apiRoutes });
 
   return fileContent;

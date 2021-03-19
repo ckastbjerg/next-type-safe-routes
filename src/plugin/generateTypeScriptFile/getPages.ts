@@ -3,7 +3,7 @@ import getNextRouteUrlParams from "./getNextRouteUrlParams";
 import { Page } from "./types";
 
 const shouldIncludeEntry = (path: string) =>
-  !path.startsWith("_") && !path.match(".md");
+  !path.startsWith("/_") && !path.match(".md");
 
 const getPages = (routes: string[]): Page[] => {
   return routes.filter(shouldIncludeEntry).map((route) => {

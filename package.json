@@ -1,7 +1,7 @@
 {
   "name": "next-type-safe-pages",
-  "version": "0.0.5",
-  "description": "Generating TypeScript types to represent all pages in a Next.js project",
+  "version": "0.0.14",
+  "description": "Ensure that the pages and API routes in you Next.js app actually exists.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "bin/cli.js",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@types/node": "^14.14.34",
+    "mkdirp": "^1.0.4",
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {

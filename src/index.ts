@@ -1,1 +1,1 @@
-export { default } from './generateTypeScriptFile';
+export * from "./utils";
