@@ -1,7 +1,7 @@
 {
   "name": "next-type-safe-pages",
   "version": "0.0.14",
-  "description": "Ensure that the pages and API routes in you Next.js app actually exists.",
+  "description": "Ensure that you only link to pages in your Next.js app that actually exists",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "bin/cli.js",
@@ -40,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckastbjerg/next-type-safe-routes.git"
+    "url": "git+https://github.com/ckastbjerg/next-type-safe-pages.git"
   },
   "keywords": [],
   "author": "Christian Kastbjerg",
