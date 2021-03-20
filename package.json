@@ -1,6 +1,6 @@
 {
   "name": "next-type-safe-routes",
-  "version": "0.0.15-alpha",
+  "version": "0.0.16-alpha",
   "description": "Ensure that you only link to pages in your Next.js app that actually exists",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
