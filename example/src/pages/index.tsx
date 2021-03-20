@@ -6,7 +6,7 @@ const Home = () => {
 
   return (
     <>
-      <Link to={{ path: "/links/[linkId]", linkId: 1 }}>
+      <Link to={{ route: "/links/[linkId]", linkId: 1 }}>
         <a>Go to link number 1</a>
       </Link>
       <button onClick={() => push("/links")}>Go to routes</button>

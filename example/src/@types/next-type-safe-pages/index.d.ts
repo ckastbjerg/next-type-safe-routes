@@ -5,11 +5,9 @@
 // package. You should _not_ update these types manually...
 
 declare module "next-type-safe-pages" {
-  export type TypeSafePage = "/" | { path: "/links/[linkId]", linkId: string | string[] | number } | "/links";
-  export type TypeSafeApiRoute = "/api/api-routes" | { endpoint: "/api/links/[linkId]", linkId: string | string[] | number } | "/api/links" | "/api/routes";
+  export type TypeSafePage = "/" | { route: "/links/[linkId]", linkId: string | string[] | number } | "/links";
+  export type TypeSafeApiRoute = "/api/api-routes" | { route: "/api/links/[linkId]", linkId: string | string[] | number } | "/api/links" | "/api/routes";
 
   export const getPathname = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
-  export const getSearchParams = (query: any) => string;
-  export const getApiRoute = (typeSafeUrl: TypeSafeApiRoute, query?: any) => string;
-  export const getAsPath = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute, query?: any) => string;
+  export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute, query?: any) => string;
 }

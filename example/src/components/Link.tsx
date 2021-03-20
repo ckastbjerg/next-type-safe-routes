@@ -2,7 +2,7 @@ import React from "react";
 
 import NextLink from "next/link";
 
-import { getAsPath, TypeSafePage } from "next-type-safe-pages";
+import { getRoute, TypeSafePage } from "next-type-safe-pages";
 
 type Props = {
   to: TypeSafePage;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Link = ({ to, children, ...rest }: Props) => (
-  <NextLink href={getAsPath(to)} {...rest}>
+  <NextLink href={getRoute(to)} {...rest}>
     {children}
   </NextLink>
 );
