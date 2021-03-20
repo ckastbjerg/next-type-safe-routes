@@ -1,5 +1,5 @@
 {
-  "name": "next-type-safe-pages",
+  "name": "next-type-safe-routes",
   "version": "0.0.15-alpha",
   "description": "Ensure that you only link to pages in your Next.js app that actually exists",
   "main": "dist/index.js",
@@ -40,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckastbjerg/next-type-safe-pages.git"
+    "url": "git+https://github.com/ckastbjerg/next-type-safe-routes.git"
   },
   "keywords": [],
   "author": "Christian Kastbjerg",

@@ -11,11 +11,11 @@ const run = (nextConfig = {}) => {
       // It's allows to have a `src` folder in Next.js
       // TODO: Is it possible to just get the src folder?
       const srcDir = pagesDir.replace("/pages", "");
-      const typeFolder = `${srcDir}/@types/next-type-safe-pages`;
+      const typeFolder = `${srcDir}/@types/next-type-safe-routes`;
       const typeScriptFile = generateTypeScriptFile(pagesDir);
       mkdirp.sync(typeFolder);
       fs.writeFileSync(`${typeFolder}/index.d.ts`, typeScriptFile);
-      console.info(`Wrote types to ${typeFolder}`);
+      console.info(`next-type-safe-routes: Wrote types to ${typeFolder}`);
       return config;
     },
   });
