@@ -1,21 +1,11 @@
 import { ApiRoute, Page } from "./types";
 
-const getTypeSafePage = ({ path, params }: Page) => {
+const getTypeSafeRoute = ({ route, params }: ApiRoute) => {
   if (!params?.length) {
-    return `"${path}"`;
+    return `"${route}"`;
   }
 
-  return `{ path: "${path}", ${params
-    .map((param) => `${param}: string | string[] | number`)
-    .join(",")} }`;
-};
-
-const getTypeSafeApiRoute = ({ endpoint, params }: ApiRoute) => {
-  if (!params?.length) {
-    return `"${endpoint}"`;
-  }
-
-  return `{ endpoint: "${endpoint}", ${params
+  return `{ route: "${route}", ${params
     .map((param) => `${param}: string | string[] | number`)
     .join(",")} }`;
 };
@@ -35,19 +25,17 @@ const getFileContent = ({
 // package. You should _not_ update these types manually...
 
 declare module "next-type-safe-pages" {
-  export type TypeSafePage = ${pages.map(getTypeSafePage).join(" | ")};
+  export type TypeSafePage = ${pages.map(getTypeSafeRoute).join(" | ")};
   ${
     apiRoutes.length > 0
       ? `export type TypeSafeApiRoute = ${apiRoutes
-          .map(getTypeSafeApiRoute)
+          .map(getTypeSafeRoute)
           .join(" | ")};`
       : ""
   }
 
   export const getPathname = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
-  export const getSearchParams = (query: any) => string;
-  export const getApiRoute = (typeSafeUrl: TypeSafeApiRoute, query?: any) => string;
-  export const getAsPath = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute, query?: any) => string;
+  export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute, query?: any) => string;
 }
 `;
 

@@ -4,11 +4,11 @@ import { ApiRoute } from "./types";
 
 const shouldIncludeEntry = (endpoint: string) => !endpoint.match("README");
 
-const getApiRoutes = (routes: string[]): ApiRoute[] => {
-  return routes.filter(shouldIncludeEntry).map((route) => {
-    const endpoint = getNextPageRoute(route);
-    const params = getNextRouteUrlParams(endpoint);
-    return { endpoint, params };
+const getApiRoutes = (fileNames: string[]): ApiRoute[] => {
+  return fileNames.filter(shouldIncludeEntry).map((fileName) => {
+    const route = getNextPageRoute(fileName);
+    const params = getNextRouteUrlParams(route);
+    return { route, params };
   });
 };
 

@@ -1,9 +1,9 @@
 export type Page = {
-  path: string;
+  route: string;
   params?: string[];
 };
 
 export type ApiRoute = {
-  endpoint: string;
+  route: string;
   params?: string[];
 };
