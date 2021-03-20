@@ -2,16 +2,16 @@ import React from "react";
 
 import NextLink from "next/link";
 
-import { getRoute, TypeSafePage } from "next-type-safe-pages";
+import { getRoute, TypeSafePage } from "next-type-safe-routes";
 
 type Props = {
   to: TypeSafePage;
-  children: React.ReactElement;
+  children: any;
 };
 
 const Link = ({ to, children, ...rest }: Props) => (
   <NextLink href={getRoute(to)} {...rest}>
-    {children}
+    <a style={{ display: "block" }}>{children}</a>
   </NextLink>
 );
 

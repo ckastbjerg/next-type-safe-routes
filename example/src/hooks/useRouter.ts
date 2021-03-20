@@ -1,4 +1,4 @@
-import { TypeSafePage, getRoute } from "next-type-safe-pages";
+import { TypeSafePage, getRoute } from "next-type-safe-routes";
 import { useRouter as useNextRouter } from "next/router";
 
 const useRouter = () => {
