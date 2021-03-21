@@ -2,7 +2,7 @@ import getNextPageRoute from "./getNextPageRoute";
 import getNextRouteUrlParams from "./getNextRouteUrlParams";
 import { ApiRoute } from "./types";
 
-const shouldIncludeEntry = (endpoint: string) => !endpoint.match("README");
+const shouldIncludeEntry = (endpoint: string) => endpoint.match(".ts");
 
 const getApiRoutes = (fileNames: string[]): ApiRoute[] => {
   return fileNames.filter(shouldIncludeEntry).map((fileName) => {
