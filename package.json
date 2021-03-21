@@ -4,7 +4,6 @@
   "description": "Never should your users experience broken links again!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": "bin/cli.js",
   "files": [
     "dist",
     "bin"
