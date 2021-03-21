@@ -2,8 +2,10 @@ import getNextPageRoute from "./getNextPageRoute";
 import getNextRouteUrlParams from "./getNextRouteUrlParams";
 import { Page } from "./types";
 
+const ignoreRoutes = ["/_app.tsx", "/_document.tsx"];
+
 const shouldIncludeEntry = (route: string) =>
-  !route.startsWith("/_") && !route.match(".md");
+  route.match(".tsx") && !ignoreRoutes.includes(route);
 
 const getPages = (fileNames: string[]): Page[] => {
   return fileNames.filter(shouldIncludeEntry).map((fileName) => {

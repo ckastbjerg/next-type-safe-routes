@@ -1,10 +1,9 @@
 {
   "name": "next-type-safe-routes",
-  "version": "0.0.19-alpha",
+  "version": "0.0.20-alpha",
   "description": "Never should your users experience broken links again!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": "bin/cli.js",
   "files": [
     "dist",
     "bin"
@@ -12,7 +11,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "yarn build",
-    "test": "yarn jest",
+    "test": "yarn jest --updateSnapshot",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "husky": {
