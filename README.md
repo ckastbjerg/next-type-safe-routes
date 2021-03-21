@@ -1,16 +1,26 @@
-# `next-type-safe-routes` (alpha)
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Nextjs-logo.svg" height="100">
+  <h1 align="center">next-type-safe-routes</h1>
+</p>
 
-> **Important note!** This is work in progress. The API is prone to changes
+<p align="center">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/next-type-safe-routes">
+    <img alt="" src="https://img.shields.io/npm/v/next-type-safe-routes.svg?style=for-the-badge&labelColor=000000">
+  </a>
+  <a aria-label="License" href="https://github.com/ckastbjerg/next-type-safe-routes/license.md">
+    <img alt="" src="https://img.shields.io/npm/l/next.svg?style=for-the-badge&labelColor=000000">
+  </a>
+</p>
 
-The `next-type-safe-routes` plugin is a **type generator**. It parses the `/pages` folder in your Next.js application and generates types for all the **pages** and **API routes** in your application.
+`next-type-safe-routes` is a tiny "type generation" plugin for Next.js. It parses the `/pages` folder in your application and outputs types for all the **pages** and **API routes** in your application. These types can then be used to ensure that you only reference pages and API routes that _actually_ exists.
 
 #### Features
 
-- Ensure that you only link to **pages** that _actually_ exists
-- Ensure that you only use **API routes** that _actually_ exists
-- Avoid having to maintain a list of existing pages for your application
-- Compile-time ("development-time") validation for all you internal page links
-- Simple, composable utilities. Create the abstraction that works for your team and application.
+- **Automated route listing**. Avoid having to maintain a list of existing pages for your application
+- **Compile time route validation**. Avoid having to run your application to verify if links are correct, just use types.
+- **Unopinionated**. Use our simple and composable utils for generating page routes our create your own.
+
+<img src="./example.gif" />
 
 ## Table of Contents
 
@@ -21,7 +31,9 @@ The `next-type-safe-routes` plugin is a **type generator**. It parses the `/page
 
 ## Motivation
 
-At [Proper](https://helloproper.com/), we like pages. The [Next.js file-system based router](https://nextjs.org/docs/routing/introduction) help us stay consistent and organized. And it makes our features discoverable by new developers. We maintain a fairly large Next.js app consisting of ~70 pages. And we have internal page links ~200 place in the application.
+At [Proper](https://helloproper.com/), we like pages. We maintain a fairly large Next.js app consisting of ~70 pages. And we have internal page links ~200 place in the application. We find that pages make features easily discoverable for developers and end-users alike.
+
+The [Next.js file-system based router](https://nextjs.org/docs/routing/introduction) help us stay consistent and organized around our pages.
 
 Unfortunately, we've had some incidents where our application was released with broken links (links to non-existing pages). One time, a file in the `/pages` folder was renamed and we failed in correcting all links to that page. Another time, we had been a bit _too_ clever in using string concatenation for routes.
 
@@ -58,9 +70,9 @@ const nextTypeSafePages = require("next-type-safe-routes/dist/plugin").default;
 module.exports = withPlugins([nextTypeSafePages]);
 ```
 
-You can now import the `getRoute` util, and extract a route (href) that's is guaranteed to exist in your application. 
+You can now import the `getRoute` util, and extract a route (href) that's is guaranteed to exist in your application.
 
-<img src="./gif.gif" />
+<img src="./getRoute.gif" />
 
 ## How it works
 
