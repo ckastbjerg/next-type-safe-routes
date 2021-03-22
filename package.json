@@ -1,6 +1,6 @@
 {
   "name": "next-type-safe-routes",
-  "version": "0.0.20-alpha",
+  "version": "0.0.21-alpha",
   "description": "Never should your users experience broken links again!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
