@@ -65,7 +65,7 @@ The easiest way to use `next-type-safe-routes`, is with [`next-compose-plugins`]
 
 ```js
 const withPlugins = require("next-compose-plugins");
-const nextTypeSafePages = require("next-type-safe-routes/dist/plugin").default;
+const nextTypeSafePages = require("next-type-safe-routes/plugin");
 
 module.exports = withPlugins([nextTypeSafePages]);
 ```

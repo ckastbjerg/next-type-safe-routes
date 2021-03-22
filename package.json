@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "plugin.js"
   ],
   "scripts": {
     "build": "tsc",
