@@ -12,33 +12,22 @@
   </a>
 </p>
 
-`next-type-safe-routes` is a tiny type generation plugin for Next.js. It parses the `/pages` folder in your application and output types for all the **pages** and **API routes** in your application. These types can then be used to ensure that you only link to pages (and only use API routes) that _actually_ exists.
+`next-type-safe-routes` parses the `/pages` folder in your Next.js app and generates types for all the **pages** and **API routes** in the application. These types can then be used to ensure that you only link to pages (and only use API routes) that _actually_ exists in your application.
 
-#### Features
+With the types generated, you can use the `getRoute` utility to retrieve **links that are guaranteed to exist** in your the application:
+
+```ts
+import { getRoute } from "next-type-safe-routes";
+
+getRoute("/users"); // for simple routes
+getRoute({ route: "/users/[userId]", userId: "1" }); // for dynamic routes
+```
+
+## Features
 
 - **Automatic route listing**. Avoid having to maintain a list of existing pages for your application
 - **Compile time route validation**. Avoid having to run your application to verify if links are correct, just use types
-- **Unopinionated**. Use our simple and composable utils our create your own implementation using the generated types
-
-<img src="./example.gif" />
-
-## Table of Contents
-
-1. [Motivation](#motivation)
-2. [Installation](#installation)
-3. [Usage](#usage)
-4. [How it works](#how-it-works)
-5. [API reference](#api-reference)
-
-## Motivation
-
-At my company, [Proper](https://helloproper.com/), we like pages. Our self service platform is a fairly large app that currently consist of ~70 pages. And we link to those pages ~200 places in the application. We find that pages make features easily discoverable for developers and end-users alike. And having pages (urls) for each of our features help us maintain a sane information architecture.
-
-The [Next.js file-system based router](https://nextjs.org/docs/routing/introduction) help us stay consistent and organized around our pages. However, we've had some incidents where our application was released with broken links (links to non-existing pages). One time, a file in the `/pages` folder was renamed and we simply overlooked (forgot to change) some of the links to that page. Another time, some "clever" string concatenation caused an issue. In this case, we had moved a page, and failed to update all links to the page correctly due to the concatenated links.
-
-With the `next-type-safe-routes`, we're trying to mitigate this issue. All links in our application are now type-safe, which gives us a lot more confidence when refactoring as well as a top notch developer experience.
-
-> We considered something like the [`next-routes`](https://github.com/fridays/next-routes) approach, but we don't want to manually have to maintain a list of routes in the application. We prefer conventions to be enforced when possible.
+- **Unopinionated**. Use our simple and composable utils or create your own abstraction
 
 ## Installation
 
@@ -56,11 +45,9 @@ npm install next-type-safe-routes --save
 
 ## Usage
 
-> For a detailed example setup, see the [`/example`](/example) folder
+> For an example setup, see the [`/example`](/example) folder
 
-The easiest way to use `next-type-safe-routes`, is with [`next-compose-plugins`](https://github.com/cyrilwanner/next-compose-plugins). To do so, simply add a `next.config.js` file.
-
-> See [`/example/src/next.config.js`](/example/src/next.config.js)
+The easiest way to use `next-type-safe-routes`, is with [`next-compose-plugins`](https://github.com/cyrilwanner/next-compose-plugins). With `next-compose-plugins` installed, you can add a `next.config.js` file with the following content:
 
 ```js
 const withPlugins = require("next-compose-plugins");
@@ -78,6 +65,8 @@ You can now import the `getRoute` util from `next-type-safe-routes` and use it t
 <img src="./getRoute.gif" />
 
 Now you just need to decide how you want to integrate `next-type-safe-routes` in your project. If you want inspiration, we demonstrate how to create a simple abstraction for the Next.js `Link` and `router` in [the example project](/example/src).
+
+<img src="./example.gif" />
 
 ## How it works
 
@@ -156,3 +145,17 @@ export type TypeSafePage =
 ```
 
 > Note, the `TypeSafePage` and `TypeSafeApiRoute` are kept separate even though they are essentially the same type. We do this, as you may potentially want to distinguish between them in your application.
+
+## Motivation
+
+At my company, [Proper](https://helloproper.com/), we like pages. Like...a lot! Our platform is a fairly large Next.js application consisting of ~70 pages. And we link between pages ~200 places in the application.
+
+We find that having pages make features easily discoverable by end-users and developers alike. And having pages (urls) for each of our features help us maintain a sane information architecture throughout our platform.
+
+The [Next.js file-system based router](https://nextjs.org/docs/routing/introduction) help us stay consistent and organised around our pages. But we've had some incidents where our application was released with dead links.
+
+At one point, a file in the `/pages` folder was renamed and we simply overlooked (forgot to change) some of the links to that page. Another time, a bit of "clever" string concatenation caused an issue. In this case, we had moved a page, and failed to update all links to the page correctly due to the concatenated links.
+
+With the `next-type-safe-routes`, we're trying to mitigate this issue. The plugin gives us confidence when refactoring as well as a top notch developer experience.
+
+> We considered something like the [`next-routes`](https://github.com/fridays/next-routes) approach, but we don't want to manually have to maintain a list of routes in the application. We prefer conventions to be enforced when possible.

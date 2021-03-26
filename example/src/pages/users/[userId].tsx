@@ -1,13 +1,6 @@
 import { Link } from "components";
 import { useApiRoute, useRouter } from "hooks";
 
-import { getRoute } from "next-type-safe-routes";
-
-getRoute({route: "/users/[userId]", userId: 1})
-
-
-
-
 const UserPage = () => {
   const { query } = useRouter();
   const userId = query.userId as string;
