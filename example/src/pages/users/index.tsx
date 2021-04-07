@@ -11,7 +11,9 @@ const UsersPage = () => {
   return (
     <>
       {users.map(({ userId, name }) => (
-        <Link to={{ route: "/users/[userId]", userId }}>{name}</Link>
+        <Link to={{ route: "/users/[userId]", params: { userId } }}>
+          {name}
+        </Link>
       ))}
     </>
   );

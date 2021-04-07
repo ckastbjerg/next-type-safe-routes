@@ -1,13 +1,15 @@
 import { ApiRoute, Page } from "./types";
 
+const getParam = (param: string) => `${param}: string | string[] | number`;
+
 const getTypeSafeRoute = ({ route, params }: ApiRoute) => {
   if (!params?.length) {
-    return `"${route}"`;
+    return `"${route}" | { route: "${route}", query?: Query }`;
   }
 
-  return `{ route: "${route}", ${params
-    .map((param) => `${param}: string | string[] | number`)
-    .join(",")} }`;
+  const paramsString = params.map(getParam).join(",");
+
+  return `{ route: "${route}", params: { ${paramsString} }, query?: Query }`;
 };
 
 type Args = {
@@ -22,6 +24,7 @@ const getFileContent = ({
 // package. You should _not_ update these types manually...
 
 declare module "next-type-safe-routes" {
+  type Query = { [key: string]: string | number };
   export type TypeSafePage = ${pages.map(getTypeSafeRoute).join(" | ")};
   ${
     apiRoutes.length > 0
@@ -30,9 +33,8 @@ declare module "next-type-safe-routes" {
           .join(" | ")};`
       : ""
   }
-
   export const getPathname = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
-  export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute, query?: any) => string;
+  export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
 }
 `;
 

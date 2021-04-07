@@ -16,12 +16,7 @@
 
 With the types generated, you can use the `getRoute` utility to retrieve **links that are guaranteed to exist** in your the application:
 
-```ts
-import { getRoute } from "next-type-safe-routes";
-
-getRoute("/users"); // for simple routes
-getRoute({ route: "/users/[userId]", userId: "1" }); // for dynamic routes
-```
+<img src="./getRoute.gif" />
 
 ## Features
 
@@ -62,7 +57,14 @@ When you start up your application, we will generate types for all of your pages
 
 You can now import the `getRoute` util from `next-type-safe-routes` and use it to retrieve a route that's is guaranteed to exist in your application.
 
-<img src="./getRoute.gif" />
+```ts
+import { getRoute } from "next-type-safe-routes";
+
+// for simple routes
+getRoute("/users");
+// for dynamic routes
+getRoute({ route: "/users/[userId]", params: { userId: "1" } });
+```
 
 Now you just need to decide how you want to integrate `next-type-safe-routes` in your project. If you want inspiration, we demonstrate how to create a simple abstraction for the Next.js `Link` and `router` in [the example project](/example/src).
 
@@ -95,29 +97,74 @@ How you ensure that only links to existing pages is essentially up to you, but w
 
 #### The `getRoute` method
 
-Method that converts a type-safe route to an "actual" route:
+A simple method that converts a type-safe route to an "actual" route.
+
+First, import the method:
 
 ```ts
 import { getRoute } from "next-type-safe-routes";
-
-const route = getRoute("/users"); // => '/users'
-const route = getRoute({ route: "/users/[userId]", userId: 1234 }); // => '/users/1234'
 ```
+
+For simple (non-dynamic) routes, you can simply do:
+
+```ts
+const route = getRoute("/users");
+```
+
+This will simply return the string `/users`.
+
+If you need to include a (non-typed) query (or just prefer being more explicit), you can pass an object like so:
+
+```ts
+const route = getRoute({
+  route: "/users",
+  query: { "not-typed": "whatevs" },
+});
+```
+
+This will return the string `/users?not-typed=whatevs`.
+
+```ts
+const route = getRoute({
+  route: "/users/[userId]",
+  params: { userId: 1234 },
+});
+```
+
+This will return the string `/users/1234`.
 
 #### The `getPathname` method
 
-Method that just returns the pathname for a type-safe route.
+A simple method that just returns the pathname for a type-safe route.
+
+First, import the method:
 
 ```ts
-const path = getPathname("/users"); // => '/users'
-const path = getPathname({ route: "/users/[userId]", userId: 1234 }); // => '/users/[userId]'
+import { getPathname } from "next-type-safe-routes";
 ```
 
-You may not need this in you application.
+For simple (non-dynamic) routes, you can simply do:
+
+```ts
+const path = getPathname("/users");
+```
+
+This will return the string `/users`.
+
+And for
+
+```ts
+const path = getPathname({
+  route: "/users/[userId]",
+  params: { userId: 1234 },
+});
+```
+
+This will return the string `/users/[userId]`.
 
 #### The `TypeSafePage` and `TypeSafeApiRoute` types
 
-These are useful for making your own abstraction. For instance, if you want to make a tiny abstraction ontop of the `next/router`:
+These can be useful for making your own abstraction. For instance, if you want to make a tiny abstraction ontop of the `next/router`:
 
 ```ts
 import { TypeSafePage, getRoute } from "next-type-safe-routes";
@@ -126,6 +173,7 @@ import { useRouter as useNextRouter } from "next/router";
 const useRouter = () => {
   const router = useNextRouter();
 
+  // Say you only want to allow links to pages (and not API routes)
   const push = (typeSafeUrl: TypeSafePage) => {
     router.push(getRoute(typeSafeUrl));
   };
@@ -136,12 +184,37 @@ const useRouter = () => {
 export default useRouter;
 ```
 
-The type can be of the type `string` (for non-dynamic routes) or `{ route: string, >ROUTE_PARAMS< }` for dynamic routes. For instance:
+For basic routes, the type can be of the type `string` or:
 
 ```ts
+{
+  route: string,
+  query?: { ... } // any key value pairs (not type-safe)
+}
+```
+
+And for dynamic routes, the type is always:
+
+```ts
+{
+  route: string,
+  params: { ... }, // based on the file name
+  query?: { ... } // any key value pairs (not type-safe)
+}
+```
+
+**Example**:
+
+```ts
+type Query = { [key: string]: string | number };
 export type TypeSafePage =
   | "/users"
-  | { route: "/users/[userId]"; userId: string | string[] | number };
+  | { route: "/users"; query?: Query }
+  | {
+      route: "/users/[userId]";
+      params: { userId: string | number };
+      query?: Query;
+    };
 ```
 
 > Note, the `TypeSafePage` and `TypeSafeApiRoute` are kept separate even though they are essentially the same type. We do this, as you may potentially want to distinguish between them in your application.
