@@ -1,7 +1,11 @@
 // NOTE, these will be replaced with the "real" TypeSafePage type
 // when generating types for a project
-type TypeSafePage = string | { route: string; routeId: string | number };
-type TypeSafeApiRoute = string | { route: string; routeId: string | number };
+type Query = { [key: string]: string | number };
+type TypeSafePage =
+  | string
+  | { route: string; query?: Query }
+  | { route: string; params: any; query?: Query };
+type TypeSafeApiRoute = TypeSafePage;
 
 export const getPathname = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => {
   if (typeof typeSafeUrl === "string") {
@@ -20,20 +24,18 @@ const getSearchParams = (query: any) => {
   return `?${params}`;
 };
 
-export const getRoute = (
-  typeSafeUrl: TypeSafePage | TypeSafeApiRoute,
-  query?: any
-) => {
-  const searchParams = getSearchParams(query);
+export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => {
   if (typeof typeSafeUrl === "string") {
-    return `${typeSafeUrl}${searchParams}`;
+    return `${typeSafeUrl}`;
   }
 
-  const { route, ...params } = typeSafeUrl;
-  let href = route as string;
+  const searchParams = getSearchParams(typeSafeUrl.query);
+
+  let route = typeSafeUrl.route as string;
+  const params = "params" in typeSafeUrl ? typeSafeUrl.params : {};
   Object.keys(params).forEach((param) => {
-    href = href.replace(`[${param}]`, (params as any)[param]);
+    route = route.replace(`[${param}]`, (params as any)[param]);
   });
 
-  return `${href}${searchParams}`;
+  return `${route}${searchParams}`;
 };
