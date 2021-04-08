@@ -24,7 +24,7 @@ const getFileContent = ({
 // package. You should _not_ update these types manually...
 
 declare module "next-type-safe-routes" {
-  type Query = { [key: string]: string | number };
+  type Query = { [key: string]: any };
   export type TypeSafePage = ${pages.map(getTypeSafeRoute).join(" | ")};
   ${
     apiRoutes.length > 0

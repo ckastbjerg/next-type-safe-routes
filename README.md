@@ -206,7 +206,7 @@ And for dynamic routes, the type is always:
 **Example**:
 
 ```ts
-type Query = { [key: string]: string | number };
+type Query = { [key: string]: any };
 export type TypeSafePage =
   | "/users"
   | { route: "/users"; query?: Query }
