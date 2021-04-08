@@ -1,6 +1,6 @@
 // NOTE, these will be replaced with the "real" TypeSafePage type
 // when generating types for a project
-type Query = { [key: string]: string | number };
+type Query = { [key: string]: any };
 type TypeSafePage =
   | string
   | { route: string; query?: Query }
