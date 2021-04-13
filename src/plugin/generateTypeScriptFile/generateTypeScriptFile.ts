@@ -1,8 +1,12 @@
 import walkSync from "walk-sync";
 
-import getApiRoutes from "./getApiRoutes";
 import getFileContent from "./getFileContent";
-import getPages from "./getPages";
+import getRoutes from "./getRoutes";
+
+const ignorePagesRoutes = ["/_app.tsx", "/_document.tsx"];
+const shouldIncludePageEntry = (route: string) =>
+  route.match(".tsx") && !ignorePagesRoutes.includes(route);
+const shouldIncludeApiRouteEntry = (endpoint: string) => endpoint.match(".ts");
 
 const generateTypeScriptFile = (pagesDir: string) => {
   const pagesFiles = walkSync(pagesDir, {
@@ -13,8 +17,13 @@ const generateTypeScriptFile = (pagesDir: string) => {
     directories: false,
   });
 
-  const pages = getPages(pagesFiles.map((page) => `/${page}`));
-  const apiRoutes = getApiRoutes(apiRouteFiles.map((page) => `/api/${page}`));
+  const relevantPages = pagesFiles.filter(shouldIncludePageEntry);
+  const pages = getRoutes(relevantPages.map((page) => `/${page}`));
+  const relavantApiRoutes = apiRouteFiles.filter(shouldIncludeApiRouteEntry);
+  const apiRoutes = getRoutes(
+    relavantApiRoutes.map((route) => `/api/${route}`)
+  );
+
   const fileContent = getFileContent({ pages, apiRoutes });
 
   return fileContent;

@@ -1,4 +1,12 @@
+import { getIsCatchAllRoute, getIsOptionalCatchAllRoute } from "./utils";
+
 const getNextPageRoute = (fileName: string) => {
+  if (getIsOptionalCatchAllRoute(fileName)) {
+    return fileName.split("/[[...")[0];
+  } else if (getIsCatchAllRoute(fileName)) {
+    return fileName.split("/[...")[0];
+  }
+
   const route = fileName
     // remove the file extension
     .split(".")[0]

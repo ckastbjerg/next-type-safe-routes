@@ -1,15 +1,31 @@
 import { ApiRoute, Page } from "./types";
 
-const getParam = (param: string) => `${param}: string | string[] | number`;
+const getParam = (param: string) => `${param}: string | number`;
 
-const getTypeSafeRoute = ({ route, params }: ApiRoute) => {
+const getTypeSafeRoute = ({
+  route,
+  params,
+  isCatchAllRoute,
+  isOptionalCatchAllRoute,
+}: ApiRoute) => {
   if (!params?.length) {
-    return `"${route}" | { route: "${route}", query?: Query }`;
+    if (isOptionalCatchAllRoute) {
+      return `"${route}" | { route: "${route}", path?: string, query?: Query }`;
+    } else if (isCatchAllRoute) {
+      return `{ route: "${route}", path: string, query?: Query }`;
+    } else {
+      return `"${route}" | { route: "${route}", query?: Query }`;
+    }
+  } else {
+    const paramsString = params.map(getParam).join(",");
+    if (isOptionalCatchAllRoute) {
+      return `"${route}" | { route: "${route}", path?: string, params: { ${paramsString} }, query?: Query }`;
+    } else if (isCatchAllRoute) {
+      return `{ route: "${route}", path: string, params: { ${paramsString} }, query?: Query }`;
+    } else {
+      return `{ route: "${route}", params: { ${paramsString} }, query?: Query }`;
+    }
   }
-
-  const paramsString = params.map(getParam).join(",");
-
-  return `{ route: "${route}", params: { ${paramsString} }, query?: Query }`;
 };
 
 type Args = {
