@@ -7,12 +7,10 @@ const Home = () => {
     <>
       <button onClick={() => push("/users")}>Show users</button>
       <Link to="/optional-catch-all">Optional catch all (no path)</Link>
-      <Link to={{ route: "/catch-all", path: "/a/b/c" }}>
+      <Link to={{ route: "/optional-catch-all", path: "/a/b/c" }}>
         Optional catch all
       </Link>
-      <Link to={{ route: "/optional-catch-all", path: "/a/b/c" }}>
-        Catch all
-      </Link>
+      <Link to={{ route: "/catch-all", path: "/a/b/c" }}>Catch all</Link>
       <Link
         to={{
           route: "/nested-catch-all/[dynamic]/slugs",
