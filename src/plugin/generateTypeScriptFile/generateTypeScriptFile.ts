@@ -3,7 +3,7 @@ import walkSync from "walk-sync";
 import getFileContent from "./getFileContent";
 import getRoutes from "./getRoutes";
 
-const ignorePagesRoutes = ["/_app.tsx", "/_document.tsx"];
+const ignorePagesRoutes = ["_app.tsx", "_document.tsx"];
 const shouldIncludePageEntry = (route: string) =>
   route.match(".tsx") && !ignorePagesRoutes.includes(route);
 const shouldIncludeApiRouteEntry = (endpoint: string) => endpoint.match(".ts");
