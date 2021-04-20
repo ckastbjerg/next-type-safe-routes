@@ -3,8 +3,8 @@
 type Query = { [key: string]: any };
 type TypeSafePage =
   | string
-  | { route: string; query?: Query }
-  | { route: string; params: any; query?: Query };
+  | { route: string; path?: string; query?: Query }
+  | { route: string; path?: string; params: any; query?: Query };
 type TypeSafeApiRoute = TypeSafePage;
 
 export const getPathname = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => {
@@ -36,6 +36,7 @@ export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => {
   Object.keys(params).forEach((param) => {
     route = route.replace(`[${param}]`, (params as any)[param]);
   });
+  const path = typeSafeUrl.path || "";
 
-  return `${route}${searchParams}`;
+  return `${route}${path}${searchParams}`;
 };

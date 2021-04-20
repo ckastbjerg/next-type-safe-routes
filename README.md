@@ -60,10 +60,12 @@ You can now import the `getRoute` util from `next-type-safe-routes` and use it t
 ```ts
 import { getRoute } from "next-type-safe-routes";
 
-// for simple routes
+// for simple routes (e.g. the file `/pages/users.tsx`)
 getRoute("/users");
-// for dynamic routes
+// for dynamic routes (e.g. the file `/pages/users/[userId]/index.tsx`)
 getRoute({ route: "/users/[userId]", params: { userId: "1" } });
+// for catch all routes (e.g. the file `/pages/catch-all/[[...slug]].tsx`)
+getRoute({ route: "/catch-all", path: "/a/b/c" });
 ```
 
 Now you just need to decide how you want to integrate `next-type-safe-routes` in your project. If you want inspiration, we demonstrate how to create a simple abstraction for the Next.js `Link` and `router` in [the example project](/example/src).
@@ -99,68 +101,47 @@ How you ensure that only links to existing pages is essentially up to you, but w
 
 A simple method that converts a type-safe route to an "actual" route.
 
-First, import the method:
+**Examples:**
 
 ```ts
 import { getRoute } from "next-type-safe-routes";
-```
 
-For simple (non-dynamic) routes, you can simply do:
+// For simple (non-dynamic) routes
+const route = getRoute("/users"); // => "/users"
 
-```ts
-const route = getRoute("/users");
-```
-
-This will simply return the string `/users`.
-
-If you need to include a (non-typed) query (or just prefer being more explicit), you can pass an object like so:
-
-```ts
+// With query params
 const route = getRoute({
   route: "/users",
   query: { "not-typed": "whatevs" },
-});
-```
+}); // => "/users?not-typed=whatevs"
 
-This will return the string `/users?not-typed=whatevs`.
-
-```ts
+// For dynamic routes
 const route = getRoute({
   route: "/users/[userId]",
   params: { userId: 1234 },
-});
+}); // => "/users/1234"
+
+// For catch all routes
+const route = getRoute({
+  route: "/catch-all",
+  path: "/can/be/anything",
+}); // => "/catch-all/can/be/anything"
 ```
 
-This will return the string `/users/1234`.
+> [Optional catch all routes](https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes) are also supported.
 
 #### The `getPathname` method
 
-A simple method that just returns the pathname for a type-safe route.
-
-First, import the method:
+The `getPathname` works similarly to the `getRoute`. It just returs a [Next.js pathname](https://nextjs.org/docs/api-reference/next/router#router-object). For instance:
 
 ```ts
 import { getPathname } from "next-type-safe-routes";
-```
 
-For simple (non-dynamic) routes, you can simply do:
-
-```ts
-const path = getPathname("/users");
-```
-
-This will return the string `/users`.
-
-And for
-
-```ts
 const path = getPathname({
   route: "/users/[userId]",
   params: { userId: 1234 },
-});
+}); // => `/users/[userId]`
 ```
-
-This will return the string `/users/[userId]`.
 
 #### The `TypeSafePage` and `TypeSafeApiRoute` types
 
@@ -203,7 +184,18 @@ And for dynamic routes, the type is always:
 }
 ```
 
-**Example**:
+And for [catch all routes](https://nextjs.org/docs/routing/dynamic-routes#catch-all-routes), a (non-typed) `path` will also be required (or optional for [optional catch all routes](https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes)):
+
+```ts
+{
+  route: string,
+  path: string,
+  params: { ... }, // based on the file name
+  query?: { ... } // any key value pairs (not type-safe)
+}
+```
+
+**Examples**:
 
 ```ts
 type Query = { [key: string]: any };
@@ -213,6 +205,12 @@ export type TypeSafePage =
   | {
       route: "/users/[userId]";
       params: { userId: string | number };
+      query?: Query;
+    }
+  | {
+      route: "/users/[userId]/catch-all-route";
+      params: { userId: string | number };
+      path="/catch/all/path"
       query?: Query;
     };
 ```
