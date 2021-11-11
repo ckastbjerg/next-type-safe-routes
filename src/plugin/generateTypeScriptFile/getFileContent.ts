@@ -49,8 +49,8 @@ declare module "next-type-safe-routes" {
           .join(" | ")};`
       : ""
   }
-  export const getPathname = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
-  export const getRoute = (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
+  export const getPathname: (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
+  export const getRoute: (typeSafeUrl: TypeSafePage | TypeSafeApiRoute) => string;
 }
 `;
 
