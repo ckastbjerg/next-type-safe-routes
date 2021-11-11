@@ -9,7 +9,7 @@ const getNextPageRoute = (fileName: string) => {
 
   const route = fileName
     // remove the file extension
-    .split(".")[0]
+    .replace(/\.[^.]+$/, '')
     // index pages don't need the "/index" when used as hrefs
     .replace("/index", "");
 
