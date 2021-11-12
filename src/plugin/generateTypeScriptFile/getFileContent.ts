@@ -1,6 +1,6 @@
 import { ApiRoute, Page } from "./types";
 
-const getParam = (param: string) => `${param}: string | number`;
+const getParam = (param: string) => `"${param}": string | number`;
 
 const getTypeSafeRoute = ({
   route,
