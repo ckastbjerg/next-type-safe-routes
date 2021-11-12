@@ -22,9 +22,9 @@ const writeTypesToDisc = (nextPagesDirectory: string) => {
   log(`types written to ${typeFolder}`);
 };
 
-const run = (nextConfig = {}) => {
+const run = (nextConfig: any = {}) => {
   return Object.assign({}, nextConfig, {
-    webpack(config) {
+    webpack(config, options) {
       // This seems to be the way to get the path to the pages
       // directory in a Next.js app. Since it's possible to have a
       // `/src` folder (https://nextjs.org/docs/advanced-features/src-directory)
@@ -37,6 +37,12 @@ const run = (nextConfig = {}) => {
       const watcher = chokidar.watch(pagesDir, { ignoreInitial: true });
       watcher.on("add", () => writeTypesToDisc(pagesDir));
       watcher.on("unlink", () => writeTypesToDisc(pagesDir));
+
+      // if other webpack customizations exist, run them
+      if (typeof nextConfig.webpack === 'function') {
+        return nextConfig.webpack(config, options);
+      }
+
       // Return the un-modified config
       return config;
     },
