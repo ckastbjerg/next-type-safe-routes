@@ -3,21 +3,23 @@ import generateTypeScriptFile from "./generateTypeScriptFile";
 import mkdirp from "mkdirp";
 import fs from "fs";
 import chokidar from "chokidar";
+import path from "path";
 
 const packageName = "next-type-safe-routes";
-const typeFolder = `@types/${packageName}`;
+const typeFolder = path.join("@types", packageName);
 
 const log = (message: string) => {
   console.log(`\x1b[36m${packageName}\x1b[0m: ${message}`);
 };
 
 const writeTypesToDisc = (nextPagesDirectory: string) => {
-  const srcDir = nextPagesDirectory.replace("/pages", "");
-  const typeFolderPath = `${srcDir}/${typeFolder}`;
+  // we assume the src directory is the directory containing the pages directory
+  const srcDir = path.dirname(nextPagesDirectory);
+  const typeFolderPath = path.join(srcDir, typeFolder);
   const typeScriptFile = generateTypeScriptFile(nextPagesDirectory);
 
   mkdirp.sync(typeFolderPath);
-  fs.writeFileSync(`${typeFolderPath}/index.d.ts`, typeScriptFile);
+  fs.writeFileSync(path.join(typeFolderPath, "index.d.ts"), typeScriptFile);
 
   log(`types written to ${typeFolder}`);
 };
