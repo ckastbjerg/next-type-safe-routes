@@ -5,7 +5,7 @@ const getNextRouteUrlParams = (href: string) => {
     ?.filter((param) => !isCatchAllParam(param))
     .map((param) => param.replace("[", "").replace("]", ""));
 
-  return !!params?.length ? params : undefined;
+  return params?.length ? params : undefined;
 };
 
 export default getNextRouteUrlParams;

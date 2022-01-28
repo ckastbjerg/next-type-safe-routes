@@ -41,7 +41,7 @@ const run = (nextConfig: any = {}) => {
       watcher.on("unlink", () => writeTypesToDisc(pagesDir));
 
       // if other webpack customizations exist, run them
-      if (typeof nextConfig.webpack === 'function') {
+      if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options);
       }
 
