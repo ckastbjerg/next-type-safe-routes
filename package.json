@@ -13,7 +13,7 @@
     "build": "tsc",
     "prepare": "yarn build",
     "test": "yarn jest --updateSnapshot",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint '*/**/*.{js,ts}' --quiet --fix"
   },
   "husky": {
     "hooks": {
@@ -26,23 +26,23 @@
     ]
   },
   "dependencies": {
-    "@types/node": "^14.14.34",
+    "chokidar": "^3.5.1",
     "mkdirp": "^1.0.4",
-    "walk-sync": "^2.2.0",
-    "chokidar": "^3.5.1"
+    "walk-sync": "^2.2.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.21",
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
+    "@types/node": "^14.14.34",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "commander": "^7.1.0",
-    "eslint": "^7.22.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^26.6.3",
-    "prettier": "^2.2.1",
+    "prettier": "^2.5.1",
     "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
+    "typescript": "^4.5.5"
   },
   "repository": {
     "type": "git",
