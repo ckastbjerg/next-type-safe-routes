@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
     "strictNullChecks": true,
     "target": "es5",
     "outDir": "dist",
