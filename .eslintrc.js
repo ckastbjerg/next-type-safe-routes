@@ -13,12 +13,9 @@ module.exports = {
     },
   },
   plugins: ["prettier"],
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended", // Must be the last one
-  ],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   rules: {
     // if you turn off a rule, explain why
+    "prettier/prettier": "warn",
   },
 };
