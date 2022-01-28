@@ -1,10 +1,11 @@
 import { getIsCatchAllRoute, getIsOptionalCatchAllRoute } from "./utils";
 
-const getNextPageRoute = (fileName: string) => {
+const getNextPageRoute = (fileName: string): string => {
+  // casts safe since we guard with the conditionals
   if (getIsOptionalCatchAllRoute(fileName)) {
-    return fileName.split("/[[...")[0];
+    return fileName.split("/[[...")[0] as string;
   } else if (getIsCatchAllRoute(fileName)) {
-    return fileName.split("/[...")[0];
+    return fileName.split("/[...")[0] as string;
   }
 
   const route = fileName
