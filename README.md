@@ -72,6 +72,30 @@ Now you just need to decide how you want to integrate `next-type-safe-routes` in
 
 <img src="./example.gif" />
 
+## Configuration
+
+You can configure the plugin by adding values to the `nextTypeSafeRoutes` object
+in `next.config.js`:
+
+```js
+const withPlugins = require("next-compose-plugins");
+const nextTypeSafePages = require("next-type-safe-routes/plugin");
+
+module.exports = withPlugins([nextTypeSafePages], {
+  outDir: "@types/custom-page-type-directory",
+});
+```
+
+Available options:
+
+### `outDir`
+
+**Default:** `@types/next-type-safe-routes`
+
+If provided, will save the types to a file called `index.d.ts` in the provided
+directory. Paths are placed relative to the `src/` directory, and absolute paths
+are also supported.
+
 ## How it works
 
 Since the Next.js router is based (strictly) on the file-system, we can determine which pages and API routes exists in an application simply by parsing the `/pages` folder. And due to the strictness, we can also determine which parameters are needed for dynamic routes.
