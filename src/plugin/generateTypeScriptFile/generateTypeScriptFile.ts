@@ -8,15 +8,26 @@ const shouldIncludePageEntry = (route: string) =>
   route.match(".tsx") && !ignorePagesRoutes.includes(route);
 const shouldIncludeApiRouteEntry = (endpoint: string) => endpoint.match(".ts");
 
+const getApiRouteFiles = (pagesDir: string) => {
+  try {
+    return walkSync(`${pagesDir}/api`, {
+      directories: false,
+    });
+  } catch (err) {
+    // api routes are not required
+    if (err.code === "ENOENT") {
+      return [];
+    }
+    throw err;
+  }
+};
+
 const generateTypeScriptFile = (pagesDir: string) => {
   const pagesFiles = walkSync(pagesDir, {
     directories: false,
     ignore: ["api"],
   });
-  const apiRouteFiles = walkSync(`${pagesDir}/api`, {
-    directories: false,
-  });
-
+  const apiRouteFiles = getApiRouteFiles(pagesDir);
   const relevantPages = pagesFiles.filter(shouldIncludePageEntry);
   const pages = getRoutes(relevantPages.map((page) => `/${page}`));
   const relavantApiRoutes = apiRouteFiles.filter(shouldIncludeApiRouteEntry);
