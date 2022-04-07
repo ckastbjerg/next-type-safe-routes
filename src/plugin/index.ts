@@ -1,54 +1,78 @@
 import generateTypeScriptFile from "./generateTypeScriptFile";
 
-import mkdirp from "mkdirp";
 import fs from "fs";
 import chokidar from "chokidar";
 import path from "path";
+import { NextConfig } from "next";
+
+export interface PluginOptions {
+  /**
+   * If provided, will save the types to the provided outDir
+   */
+  outDir?: string;
+}
 
 const packageName = "next-type-safe-routes";
-const typeFolder = path.join("@types", packageName);
+/**
+ * Expressed as a path from the srcDir
+ */
+const defaultOutDir = path.join("@types", packageName);
 
 const log = (message: string) => {
   console.log(`\x1b[36m${packageName}\x1b[0m: ${message}`);
 };
 
-const writeTypesToDisc = (nextPagesDirectory: string) => {
-  // we assume the src directory is the directory containing the pages directory
-  const srcDir = path.dirname(nextPagesDirectory);
-  const typeFolderPath = path.join(srcDir, typeFolder);
-  const typeScriptFile = generateTypeScriptFile(nextPagesDirectory);
+interface PathConfig {
+  pagesDir: string;
+  outDir: string;
+}
 
-  mkdirp.sync(typeFolderPath);
-  fs.writeFileSync(path.join(typeFolderPath, "index.d.ts"), typeScriptFile);
-
-  log(`types written to ${typeFolder}`);
+const writeTypesToDisc = ({ pagesDir, outDir: inputOutDir }: PathConfig) => {
+  const typeScriptFile = generateTypeScriptFile(pagesDir);
+  const srcDir = path.dirname(pagesDir);
+  const outDir = path.isAbsolute(inputOutDir)
+    ? inputOutDir
+    : path.join(srcDir, inputOutDir);
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(path.join(outDir, "index.d.ts"), typeScriptFile);
+  log(`types written to ${outDir}`);
 };
 
-const run = (nextConfig: any = {}) => {
-  return Object.assign({}, nextConfig, {
-    webpack(config, options) {
+const watchRoutes = ({ pagesDir, outDir }: PathConfig) => {
+  // Generate the types file when the app is being compiled
+  writeTypesToDisc({ pagesDir, outDir });
+
+  // Generate the types file again when page files are added/removed
+  const watcher = chokidar.watch(pagesDir, { ignoreInitial: true });
+  watcher.on("add", () => writeTypesToDisc({ pagesDir: pagesDir, outDir }));
+  watcher.on("unlink", () => writeTypesToDisc({ pagesDir: pagesDir, outDir }));
+};
+
+const run = (nextConfig: NextConfig = {}): NextConfig => {
+  const webpack: Exclude<NextConfig["webpack"], undefined> = (
+    config,
+    context
+  ) => {
+    const pagesDir = config.resolve.alias["private-next-pages"];
+    watchRoutes({
       // This seems to be the way to get the path to the pages
       // directory in a Next.js app. Since it's possible to have a
       // `/src` folder (https://nextjs.org/docs/advanced-features/src-directory)
       // we cannot assume that it just in a `/pages` folder directly
       // in the root of the project
-      const pagesDir = config.resolve.alias["private-next-pages"];
-      // Generate the types file when the app is being compiled
-      writeTypesToDisc(pagesDir);
-      // Generate the types file again when page files are added/removed
-      const watcher = chokidar.watch(pagesDir, { ignoreInitial: true });
-      watcher.on("add", () => writeTypesToDisc(pagesDir));
-      watcher.on("unlink", () => writeTypesToDisc(pagesDir));
+      pagesDir,
+      outDir: nextConfig["nextTypeSafeRoutes"]?.outDir || defaultOutDir,
+    });
 
-      // if other webpack customizations exist, run them
-      if (typeof nextConfig.webpack === "function") {
-        return nextConfig.webpack(config, options);
-      }
+    // if other webpack customizations exist, run them
+    if (typeof nextConfig.webpack === "function") {
+      return nextConfig.webpack(config, context);
+    }
 
-      // Return the un-modified config
-      return config;
-    },
-  });
+    // Return the un-modified config
+    return config;
+  };
+  return { ...nextConfig, webpack };
 };
 
 export default run;

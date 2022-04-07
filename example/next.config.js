@@ -1,4 +1,5 @@
 const withPlugins = require("next-compose-plugins");
-const nextTypeSafePages = require("next-type-safe-routes/plugin");
+const nextTypeSafeRoutes = require("next-type-safe-routes/plugin");
+const path = require("path");
 
-module.exports = withPlugins([nextTypeSafePages]);
+module.exports = withPlugins([nextTypeSafeRoutes]);
